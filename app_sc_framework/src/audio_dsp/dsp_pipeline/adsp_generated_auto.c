@@ -839,7 +839,7 @@ adsp_pipeline_t * adsp_auto_pipeline_init() {
                 adsp_auto.modules[14].control.config = NULL;
                 adsp_auto.modules[14].control.num_control_commands = 0;
                 fork_init(&adsp_auto.modules[14], &allocator14, 14, 1, 2, 1);
-	static reverb_config_t config15 = { .sampling_freq = 48000, .max_room_size = 1.0, .room_size = 0.5, .decay = 0.5, .damping = 0.4, .wet_gain = 1913946814, .dry_gain_db = -1, .pregain = 0.015 };
+	static reverb_config_t config15 = { .sampling_freq = 48000, .max_room_size = 1.5, .room_size = 1, .decay = 0.5, .damping = 0.4, .wet_gain = 1913946752, .dry_gain = 1913946752, .pregain = 0.015 };
 
             static reverb_state_t state15;
             static uint8_t memory15[_ADSP_MAX(1, REVERB_REQUIRED_MEMORY(1, 1, 1))];

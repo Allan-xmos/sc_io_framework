@@ -86,6 +86,8 @@ static void do_read(int instance, int cmd_id, int size, void* data) {
 
 void app_dsp_do_control(REFERENCE_PARAM(app_dsp_input_control_t, input), REFERENCE_PARAM(app_dsp_output_control_t, output)) {
 
+    // Need to load pregrain from the pipeline (set during tuning) as
+    // wet gain depends on it.
     static float pregain;
     static bool pregain_known = false;
     if(!pregain_known) {
