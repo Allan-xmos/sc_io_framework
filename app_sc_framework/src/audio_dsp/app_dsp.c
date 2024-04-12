@@ -109,6 +109,7 @@ void app_dsp_do_control(REFERENCE_PARAM(app_dsp_input_control_t, input), REFEREN
     do_write(reverb_enable_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->reverb_enable);
     do_write(duck0_enable_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->ducking_enable);
     do_write(duck1_enable_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->ducking_enable);
+    do_write(peq_enable_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->peq_enable);
 
     do_read(mic_vu_stage_index, CMD_ENVELOPE_DETECTOR_RMS_ENVELOPE, sizeof(int32_t), &output->mic_envelope);
     do_read(out_vu_stage_index, CMD_ENVELOPE_DETECTOR_RMS_ENVELOPE, sizeof(int32_t), &output->headphone_envelope);

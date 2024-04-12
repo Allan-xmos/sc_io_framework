@@ -33,6 +33,7 @@ typedef struct {
     // denoise/ducking toggles
     int32_t denoise_enable;
     int32_t ducking_enable;
+    int32_t peq_enable;
 } app_dsp_input_control_t;
 
 #define _MAX_XCORE_THREADS 8

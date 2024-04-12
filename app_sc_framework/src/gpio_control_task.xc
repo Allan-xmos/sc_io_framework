@@ -121,6 +121,7 @@ void gpio_control_task( client uart_tx_if i_uart_tx,
     dsp_input.reverb_enable = 1;
     dsp_input.denoise_enable = 0;
     dsp_input.ducking_enable = 0;
+    dsp_input.peq_enable = 1;
 
     app_dsp_output_control_t dsp_output = {0};
 
