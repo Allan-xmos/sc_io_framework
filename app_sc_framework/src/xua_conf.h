@@ -10,9 +10,9 @@
 #define NUM_USB_CHAN_IN 2
 #define I2S_CHANS_DAC 4
 #define I2S_CHANS_ADC 4
-#define MCLK_441 (256 * 44100)
-#define MCLK_48 (256 * 48000)
-#define MIN_FREQ 48000
+#define MCLK_441 (512 * 44100) // (256 * 44100)
+#define MCLK_48 (512 * 48000) // (256 * 48000)
+#define MIN_FREQ 44100
 #define MAX_FREQ 48000
 #define DEFAULT_FREQ MIN_FREQ
 
