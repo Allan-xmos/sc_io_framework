@@ -20,6 +20,7 @@
 
 // static adsp_pipeline_t * m_dsp;
 adsp_pipeline_t * m_dsp;
+adsp_controller_t m_ctrl;
 
 static void arr_to_pointer(int32_t** pointer, int32_t* arr, int n) {
     for(int i = 0; i < n; ++i) {
@@ -45,6 +46,7 @@ void app_dsp_sink(REFERENCE_PARAM(int32_t, data)) {
 // do dsp
 void app_dsp_main_local_control(void) {
     m_dsp = adsp_auto_pipeline_init();
+    adsp_controller_init(&m_ctrl, m_dsp);
     adsp_auto_pipeline_main(m_dsp);
 }
 
@@ -57,10 +59,8 @@ static void do_write(int instance, int cmd_id, int size, void* data) {
     };
     for(;;) {
         adsp_control_status_t ret = adsp_write_module_config(
-                m_dsp->modules,
-                m_dsp->n_modules,
+                &m_ctrl,
                 &cmd);
-        xassert(ADSP_CONTROL_ERROR != ret);
         if(ADSP_CONTROL_SUCCESS == ret) {
             return;
         }
@@ -75,10 +75,8 @@ static void do_read(int instance, int cmd_id, int size, void* data) {
     };
     for(;;) {
         adsp_control_status_t ret = adsp_read_module_config(
-                m_dsp->modules,
-                m_dsp->n_modules,
+                &m_ctrl,
                 &cmd);
-        xassert(ADSP_CONTROL_ERROR != ret);
         if(ADSP_CONTROL_SUCCESS == ret) {
             return;
         }
@@ -95,7 +93,7 @@ void app_dsp_do_control(REFERENCE_PARAM(app_dsp_input_control_t, input), REFEREN
         do_read(reverb_stage_index, CMD_REVERB_PREGAIN, sizeof(float), &pregain);
         pregain_known = true;
     }
-    int32_t wet_gain = adsp_reverb_calc_wet_gain(input->reverb_wet_gain, pregain);
+    int32_t wet_gain = adsp_reverb_room_calc_gain(input->reverb_wet_gain);
     do_write(reverb_stage_index, CMD_REVERB_WET_GAIN, sizeof(wet_gain), &wet_gain);
 
     // vol
