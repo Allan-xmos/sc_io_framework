@@ -90,11 +90,11 @@ void app_dsp_do_control(REFERENCE_PARAM(app_dsp_input_control_t, input), REFEREN
     static float pregain;
     static bool pregain_known = false;
     if(!pregain_known) {
-        do_read(reverb_stage_index, CMD_REVERB_PREGAIN, sizeof(float), &pregain);
+        do_read(reverb_stage_index, CMD_REVERB_ROOM_PREGAIN, sizeof(float), &pregain);
         pregain_known = true;
     }
     int32_t wet_gain = adsp_reverb_room_calc_gain(input->reverb_wet_gain);
-    do_write(reverb_stage_index, CMD_REVERB_WET_GAIN, sizeof(wet_gain), &wet_gain);
+    do_write(reverb_stage_index, CMD_REVERB_ROOM_WET_GAIN, sizeof(wet_gain), &wet_gain);
 
     // vol
     do_write(mic_vc_stage_index, CMD_VOLUME_CONTROL_TARGET_GAIN, sizeof(int32_t), &input->mic_vol);
@@ -103,7 +103,7 @@ void app_dsp_do_control(REFERENCE_PARAM(app_dsp_input_control_t, input), REFEREN
     do_write(output_vc_stage_index, CMD_VOLUME_CONTROL_TARGET_GAIN, sizeof(int32_t), &input->output_vol);
 
     int32_t threshold = (input->denoise_enable) ? NS_THRESHOLD_LOW : NS_THRESHOLD_HIGH;
-    do_write(denoise_stage_index, CMD_NOISE_SUPPRESSOR_THRESHOLD, sizeof(int32_t), &threshold);
+    do_write(denoise_stage_index, CMD_NOISE_SUPPRESSOR_EXPANDER_THRESHOLD, sizeof(int32_t), &threshold);
 
     do_write(game_loopback_switch_ch0_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->game_loopback_switch_pos);
     do_write(game_loopback_switch_ch1_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->game_loopback_switch_pos);
@@ -121,8 +121,8 @@ void app_dsp_do_control(REFERENCE_PARAM(app_dsp_input_control_t, input), REFEREN
     }
 
     // mute do after to reduce blocking
-    do_write(mic_vc_stage_index, CMD_VOLUME_CONTROL_MUTE, sizeof(int8_t), &input->mic_mute);
-    do_write(music_vc_stage_index, CMD_VOLUME_CONTROL_MUTE, sizeof(int8_t), &input->music_mute);
-    do_write(monitor_vc_stage_index, CMD_VOLUME_CONTROL_MUTE, sizeof(int8_t), &input->monitor_mute);
-    do_write(output_vc_stage_index, CMD_VOLUME_CONTROL_MUTE, sizeof(int8_t), &input->output_mute);
+    do_write(mic_vc_stage_index, CMD_VOLUME_CONTROL_MUTE_STATE, sizeof(int8_t), &input->mic_mute);
+    do_write(music_vc_stage_index, CMD_VOLUME_CONTROL_MUTE_STATE, sizeof(int8_t), &input->music_mute);
+    do_write(monitor_vc_stage_index, CMD_VOLUME_CONTROL_MUTE_STATE, sizeof(int8_t), &input->monitor_mute);
+    do_write(output_vc_stage_index, CMD_VOLUME_CONTROL_MUTE_STATE, sizeof(int8_t), &input->output_mute);
 }
