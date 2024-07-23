@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include "adsp_generated_auto.h"
 #include "adsp_instance_id_auto.h"
+#include "ns_thresholds.h"
 #include "cmds.h"
 
 // static adsp_pipeline_t * m_dsp;
@@ -103,9 +104,11 @@ void app_dsp_do_control(REFERENCE_PARAM(app_dsp_input_control_t, input), REFEREN
     do_write(monitor_vc_stage_index, CMD_VOLUME_CONTROL_TARGET_GAIN, sizeof(int32_t), &input->monitor_vol);
     do_write(output_vc_stage_index, CMD_VOLUME_CONTROL_TARGET_GAIN, sizeof(int32_t), &input->output_vol);
 
+    int32_t threshold = (input->denoise_enable) ? NS_THRESHOLD_LOW : NS_THRESHOLD_HIGH;
+    do_write(denoise_stage_index, CMD_NOISE_SUPPRESSOR_THRESHOLD, sizeof(int32_t), &threshold);
+
     do_write(game_loopback_switch_ch0_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->game_loopback_switch_pos);
     do_write(game_loopback_switch_ch1_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->game_loopback_switch_pos);
-    do_write(denoise_enable_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->denoise_enable);
     do_write(reverb_enable_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->reverb_enable);
     do_write(duck0_enable_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->ducking_enable);
     do_write(duck1_enable_stage_index, CMD_SWITCH_POSITION, sizeof(int32_t), &input->ducking_enable);
