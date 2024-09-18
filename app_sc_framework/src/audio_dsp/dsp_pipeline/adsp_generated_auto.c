@@ -584,7 +584,7 @@ adsp_pipeline_t * adsp_auto_pipeline_init() {
 	adsp_auto.n_link = 3;
 	adsp_auto.modules = adsp_auto_modules;
 	adsp_auto.n_modules = 35;
-	static pipeline_config_t config0 = { .checksum = {198, 124, 37, 239, 3, 8, 226, 126, 128, 118, 237, 170, 124, 247, 134, 151} };
+	static pipeline_config_t config0 = { .checksum = {208, 221, 82, 183, 38, 64, 15, 251, 116, 167, 50, 148, 232, 58, 245, 224} };
 
             static pipeline_state_t state0;
             static uint8_t memory0[PIPELINE_STAGE_REQUIRED_MEMORY];
@@ -812,10 +812,15 @@ adsp_pipeline_t * adsp_auto_pipeline_init() {
                 adsp_auto.modules[13].control.config = NULL;
                 adsp_auto.modules[13].control.num_control_commands = 0;
                 fork_init(&adsp_auto.modules[13], &allocator13, 13, 1, 2, 1);
-	static reverb_room_config_t config14 = { .sampling_freq = 46000, .max_room_size = 1.5, .room_size = 1, .feedback = 1803886264, .damping = 858993458, .wet_gain = 1913946814, .dry_gain = 1913946814, .pregain = 32212254 };
+	static reverb_room_constants_t reverb_room_14_constants;
+	reverb_room_14_constants.sampling_freq = 46000;
+	reverb_room_14_constants.max_room_size = 1.5;
+	reverb_room_14_constants.max_predelay = 460;
+	adsp_auto.modules[14].constants = &reverb_room_14_constants;
+	static reverb_room_config_t config14 = { .room_size = 1, .feedback = 1803886264, .damping = 858993458, .wet_gain = 1913946815, .dry_gain = 1913946815, .pregain = 32212254, .predelay = 460 };
 
             static reverb_room_state_t state14;
-            static uint8_t memory14[REVERB_ROOM_STAGE_REQUIRED_MEMORY(46000,1.5)];
+            static uint8_t memory14[REVERB_ROOM_STAGE_REQUIRED_MEMORY(46000,1.5,460)];
             static adsp_bump_allocator_t allocator14 = ADSP_BUMP_ALLOCATOR_INITIALISER(memory14);
 
             adsp_auto.modules[14].state = (void*)&state14;

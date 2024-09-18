@@ -11,6 +11,7 @@
 
 #include <stages/adsp_pipeline.h>
 #include <stages/adsp_control.h>
+#include <control/adsp_control.h>
 #include <dsp/adsp.h>
 #include <stdint.h>
 #include "adsp_generated_auto.h"
@@ -93,8 +94,12 @@ void app_dsp_do_control(REFERENCE_PARAM(app_dsp_input_control_t, input), REFEREN
         do_read(reverb_stage_index, CMD_REVERB_ROOM_PREGAIN, sizeof(float), &pregain);
         pregain_known = true;
     }
-    int32_t wet_gain = adsp_reverb_room_calc_gain(input->reverb_wet_gain);
-    do_write(reverb_stage_index, CMD_REVERB_ROOM_WET_GAIN, sizeof(wet_gain), &wet_gain);
+    // calculate wet and dry gain from wet/dry ratio
+    int32_t reverb_gains[2] = {0};
+    adsp_reverb_wet_dry_mix(reverb_gains, input->reverb_wet_gain);
+
+    do_write(reverb_stage_index, CMD_REVERB_ROOM_DRY_GAIN, sizeof(reverb_gains[0]), &reverb_gains[0]);
+    do_write(reverb_stage_index, CMD_REVERB_ROOM_WET_GAIN, sizeof(reverb_gains[1]), &reverb_gains[1]);
 
     // vol
     do_write(mic_vc_stage_index, CMD_VOLUME_CONTROL_TARGET_GAIN, sizeof(int32_t), &input->mic_vol);
